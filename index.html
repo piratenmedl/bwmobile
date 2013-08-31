@@ -1,0 +1,94 @@
+<!DOCTYPE html> 
+<html> 
+    <head> 
+        <title>Login</title> 
+        <meta name="viewport" content="width=device-width, initial-scale=1"> 
+        <meta http-equiv=”Content-Type” content=”text/html; charset=utf-8>
+        <link rel="stylesheet" href="http://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.css" />
+        <script type="text/javascript" src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
+		<script type="text/javascript" src="http://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.js"></script>
+        <script src="cordova.js"></script>
+        <script type="text/javascript">
+
+            /**
+             * Clears all the inputs in the page.
+             */
+            function clearPageInputs() {
+                $("input[type=text]").val('');
+            }
+
+
+            /**
+             * Trim function
+             */
+            String.prototype.trim = function() {
+                a = this.replace(/^\s+/, '');
+                return a.replace(/\s+$/, '');
+            };
+
+            /**
+             * Submits the login form
+             */
+            function sumbitLoginForm(user, pass) {
+                if (user.trim() == '' || pass.trim() == '')
+                {   
+                    // fill username and password in Greek language
+                    alert("Bitte Username und Passwort eingeben!");
+                }
+                else
+                {
+                    $.ajax({
+                        type: 'post',
+                        url: 'https://brainweb.brainworks.de/bea/login.php',
+                        data: "username="+user+"&password="+pass,
+                        success: function(result) {
+                            if(result) {
+                                // save in local storage
+                                localStorage.setItem("username", user);
+                                localStorage.setItem("password", pass);
+                                // perform page transition 
+                               $.mobile.changePage("menu.html");
+							   //$("#message")[0].value = result;
+                            }
+                            else {
+                                clearPageInputs()
+                                // wrong username / password in Greek language
+                                alert("Falscher Username oder falsches Passwort");
+								$("#message")[0].value = "error";
+                            }   
+                        },
+                        
+                    });
+                }
+
+                return false;
+            }
+
+            $(document).ready( function() {
+                clearPageInputs();
+
+                $("#submitButton").click(function(){
+                    sumbitLoginForm($("#username").val(), $("#password").val());
+                });
+            });
+        </script>
+    </head>
+    <body> 
+        <div data-role="page"> 
+            <div data-role="header" >
+            <h2>Login</h2></div> 
+            <div data-role="content">
+                <form id="loginForm">
+                    <p>
+                      <label for="username">Username</label>
+                      <input type="text" id="username" value=""  name="username"/>
+                      <label for="password">Password</label>
+                      <input type="password" id="password" value=""   name="password"/>
+                      <a href="forget.html">Passwort vergessen</a></p>
+                    <p><a href="#" id="submitButton" data-role="button" data-inline="true" data-theme="A" data-icon="arrow-r" data-iconpos="right2 >Login</a></p>
+                </form>
+            </div> 
+            <div data-role="footer" data-position="fixed"><h2></h2></div> 
+        </div> 
+    </body>
+</html>
