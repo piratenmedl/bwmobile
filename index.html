@@ -2,95 +2,83 @@
 <html> 
     <head> 
         <title>Login</title> 
-        <meta name="viewport" content="width=device-width, initial-scale=1"> 
-        <meta http-equiv=”Content-Type” content=”text/html; charset=utf-8>
-        <link href="http://code.jquery.com/mobile/1.3.0/jquery.mobile-1.3.0.css" rel="stylesheet"/>
-        <link href="http://code.jquery.com/mobile/1.3.0/jquery.mobile.structure-1.3.0.min.css" rel="stylesheet"/>
-		<script src="cordova.js"></script>
+        <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, minimum-scale=1,  maximum-scale=1"> 
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" >
+        <link href="css/jquery.mobile-1.3.0.css" rel="stylesheet"/>
         <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
         <script src="http://code.jquery.com/mobile/1.3.0/jquery.mobile-1.3.0.min.js"></script>    
         <script type="text/javascript">
+			
+			function init() {
+				if (isAndroid()) $("script").attr("src", "js/android/cordova.js").appendTo("head");	 
+				else if (isiOS()) $("script").attr("src", "js/ios/cordova.js").appendTo("head"); 
+				document.addEventListener("deviceready", onDeviceReady, false);
+			}
+			function isAndroid() { return navigator.userAgent.indexOf("Android") > 0; }
+			function isiOS(){
+				return ( navigator.userAgent.indexOf("iPhone") > 0 || navigator.userAgent.indexOf("iPad") > 0 || navigator.userAgent.indexOf("iPod") > 0);
+			}
+			function onDeviceReady(){ console.log("device is ready"); }	
 
-            /**
-             * Clears all the inputs in the page.
-             */
-            function clearPageInputs() {
-                $("input[type=text]").val('');
-            }
+			/** Clears all the inputs in the page. */
+            function clearPageInputs() { $("input[type=text]").val(''); }
 
-
-            /**
-             * Trim function
-             */
+            /** Trim */
             String.prototype.trim = function() {
                 a = this.replace(/^\s+/, '');
                 return a.replace(/\s+$/, '');
             };
 
-            /**
-             * Submits the login form
-             */
+            /** Submit */
             function sumbitLoginForm(user, pass) {
-                if (user.trim() == '' || pass.trim() == '')
-                {   
-                    // fill username and password in Greek language
-                    alert("Bitte Username und Passwort eingeben!");
-                }
-                else
-                {
+                if (user.trim() == '' || pass.trim() == '') alert("Bitte Username und Passwort eingeben!");
+                else {
                     $.ajax({
                         type: 'post',
                         url: 'https://brainweb.brainworks.de/bea/login.php',
                         data: "username="+user+"&password="+pass,
                         success: function(result) {
-                            if(result) {
+                            if (result) {
                                 // save in local storage
                                 localStorage.setItem("username", user);
                                 localStorage.setItem("password", pass);
-                                // perform page transition 
-                               $.mobile.changePage("menu.html");
-							   //$("#message")[0].value = result;
+                                // weiterleiten
+							    //$("#message")[0].innerHTML = result;
+                                $.mobile.changePage("menu.html");
                             }
                             else {
-                                clearPageInputs()
-                                // wrong username / password in Greek language
-                                alert("Falscher Username oder falsches Passwort");
-								$("#message")[0].value = "error";
+                                clearPageInputs();
+                                //alert("Falscher Username oder falsches Passwort");
+								$("#message")[0].innerHTML = "Falscher Benutzername oder Passwort";
                             }   
                         },
-                        
                     });
                 }
-
                 return false;
             }
 
             $(document).ready( function() {
-                clearPageInputs();
-
-                $("#submitButton").click(function(){
-                    sumbitLoginForm($("#username").val(), $("#password").val());
-                });
+                //clearPageInputs(); //alle Felder leeren
+                $("#submitButton").click(function(){ sumbitLoginForm($("#username").val(), $("#password").val()); });
             });
+			
         </script>
     </head>
     <body> 
-        <div data-role="page"> 
-            <div data-role="header" ><h2>Login</h2></div> 
-            <div data-role="content">
+        <section id="index" data-role="page">
+		<header data-role="header">
+		  <h1>brainmobile</h1></header>
+            <div data-role="content" class="content">
                 <form id="loginForm">
-                    <p>
                       <label for="username">Username</label>
                       <input type="text" id="username" value="" name="username"/>
                       <label for="password">Password</label>
-                      <input type="password" id="password" value=""   name="password"/>
-                      <a href="forget.html">Passwort vergessen</a>
-                      </p>
-                      <p>
-                      <a href="#" id="submitButton" data-role="button" data-theme="A" data-icon="arrow-r" data-iconpos="right" >Login</a></p>
+                      <input type="password" id="password" value="" name="password"/>
+                      <a href="#" id="submitButton" data-role="button" data-icon="arrow-r" data-iconpos="right" data-theme="a" >Login</a>
                 </form>
+                <span id="message" ></span>
             </div> 
-           
-        </div> 
+        <footer data-role="footer" data-position="fixed"><h1>&nbsp;</h1></footer>
+		</section>
     </body>
 </html>
