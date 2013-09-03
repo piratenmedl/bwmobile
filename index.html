@@ -38,7 +38,7 @@
                         url: 'https://brainweb.brainworks.de/bea/login.php',
                         data: "username="+user+"&password="+pass,
                         success: function(result) {
-                            if (result) {
+                            if (result > "" && result != "xxx") {
                                 // save in local storage
                                 localStorage.setItem("username", user);
                                 localStorage.setItem("password", pass);
@@ -46,10 +46,15 @@
 							    //$("#message")[0].innerHTML = result;
                                 $.mobile.changePage("menu.html");
                             }
+                            else if (result == "xxx") {
+                                //clearPageInputs();
+                                //alert("Falscher Username oder falsches Passwort");
+								$("#message")[0].innerHTML = "Falscher Benutzername oder Passwort";
+                            }   
                             else {
                                 clearPageInputs();
                                 //alert("Falscher Username oder falsches Passwort");
-								$("#message")[0].innerHTML = "Falscher Benutzername oder Passwort";
+								$("#message")[0].innerHTML = result;
                             }   
                         },
                     });
