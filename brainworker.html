@@ -5,8 +5,8 @@
         <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, minimum-scale=1,  maximum-scale=1"> 
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" >
         <link href="css/jquery.mobile-1.3.0.css" rel="stylesheet"/>
-        <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
-        <script src="http://code.jquery.com/mobile/1.3.0/jquery.mobile-1.3.0.min.js"></script>    
+        <script src="js/jquery-1.9.1.min.js"></script>
+        <script src="js/jquery.mobile-1.3.0.min.js"></script>    
 		<script>	
 			function init() {
 				if (isAndroid()) $("script").attr("src", "js/android/cordova.js").appendTo("head");	 
@@ -21,7 +21,7 @@
 			function onDeviceReady(){ console.log("device is ready"); }	
 			
 			function init() {
-				document.addEventListener("deviceready", startup, false);
+				//document.addEventListener("deviceready", startup, false);
 			}
 
 		/** Submit */
@@ -42,24 +42,24 @@
 */
 		$(document).ready( function() {
 			//searchStart();	
-            //$("#submitButton").click(function(){ searchStart(); });
+            $("#submitButton").click(function(){ getEmployeeList(); });
 		});
 		
-		var serviceURL = "https://brainweb.brainworks.de/bea/brainworker1.php";
+		var serviceURL = "https://brainweb.brainworks.de/bea/brainworker.php";
 
 		var employees;
 		
-		$('#employeeListPage').bind('pageinit', function(event) {
+		$('#mitarbeiterListeSeite').bind('pageinit', function(event) {
 			getEmployeeList();
 		});
 		
 		function getEmployeeList() {
 			$.getJSON(serviceURL , function(data) {
-				$('#employeeList li').remove();
+				$('#mitarbeiterListe li').remove();
 				employees = data.items;
 				$.each(employees, function(index, employee) {
 					$('#mitarbeiterListe').append('<li><a href="brainworker-detail.html?id=' + employee.id + '">' +
-							'<img src="pics/' + employee.picture + '"/>' +
+							//'<img src="pics/' + employee.picture + '"/>' +
 							'<h4>' + employee.vorname + ' ' + employee.nachname + '</h4>' +
 							'<p>' + employee.vorname + '</p>' +
 							'<span class="ui-li-count">' + employee.totalRows + '</span></a></li>');
@@ -74,7 +74,7 @@
 </head>
  
 <body onload="init()">
-    <div data-role="page"> 
+    <div data-role="page" id="mitarbeiterListeSeite" > 
         <div data-role="header" data-position="inline" >
         	<a href="menu.html" data-icon="arrow-l">Back</a>
             <h2>brainworker</h2>
