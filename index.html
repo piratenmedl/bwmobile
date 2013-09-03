@@ -37,7 +37,8 @@
                         type: 'post',
                         url: 'https://brainweb.brainworks.de/bea/login.php',
                         data: "username="+user+"&password="+pass,
-                        success: function(result) {
+                        dataType: 'text',
+						success: function(result) {
                             
                             if (result == "xxx") {
                                 //clearPageInputs();
