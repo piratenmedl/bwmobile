@@ -113,5 +113,6 @@ Otherwise, you can specify specific domains:
 -->
 	<access origin="http://code.jquery.com" /> 
 	<access origin="https://brainweb.brainworks.de" />
+	<access origin="http://mtb-touren.eu" />
 
 </widget>
